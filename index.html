@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포레스트 하움 (Forest Hau'm) - 숲 속의 힐링</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#1A3C34', // Deep Forest Green
+                            gold: '#C5A059', // Luxury Gold
+                            cream: '#F9F9F7', // Soft Cream
+                            gray: '#4A4A4A',
+                            light: '#E8EAE6'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "linear-gradient(to bottom, rgba(26, 60, 52, 0.3), rgba(26, 60, 52, 0.7)), url('https://images.unsplash.com/photo-1448375240586-dfd8f3793371?q=80&w=2070&auto=format&fit=crop')",
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Styles for Luxury Feel */
+        /* Korean Typography: Prevent mid-word breaks */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        li,
+        a,
+        button,
+        span,
+        div {
+            word-break: keep-all;
+        }
+
+        body {
+            background-color: #F9F9F7;
+            color: #333;
+        }
+
+        .text-gold {
+            color: #C5A059;
+        }
+
+        .bg-gold {
+            background-color: #C5A059;
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+        }
+
+        /* Navigation Hover Effect */
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -4px;
+            left: 0;
+            background-color: #C5A059;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Image Hover Zoom */
+        .img-zoom-container {
+            overflow: hidden;
+        }
+
+        .img-zoom {
+            transition: transform 0.7s ease;
+        }
+
+        .group:hover .img-zoom {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="fixed w-full top-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur-md shadow-sm"
+        id="header">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" onclick="showSection('home')"
+                class="text-2xl md:text-3xl font-serif font-bold text-brand-dark tracking-tight">
+                Forest Hau'm
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden lg:flex space-x-10">
+                <button onclick="showSection('home')"
+                    class="nav-link text-sm font-medium text-brand-dark hover:text-brand-gold transition-colors uppercase tracking-widest">Home</button>
+                <button onclick="showSection('about')"
+                    class="nav-link text-sm font-medium text-brand-dark hover:text-brand-gold transition-colors uppercase tracking-widest">About</button>
+                <button onclick="showSection('glamping')"
+                    class="nav-link text-sm font-medium text-brand-dark hover:text-brand-gold transition-colors uppercase tracking-widest">Glamping</button>
+                <button onclick="showSection('cafe')"
+                    class="nav-link text-sm font-medium text-brand-dark hover:text-brand-gold transition-colors uppercase tracking-widest">Coffee
+                    house</button>
+                <button onclick="showSection('activity')"
+                    class="nav-link text-sm font-medium text-brand-dark hover:text-brand-gold transition-colors uppercase tracking-widest">Activity</button>
+                <button onclick="showSection('bbq')"
+                    class="nav-link text-sm font-medium text-brand-dark hover:text-brand-gold transition-colors uppercase tracking-widest">BBQ</button>
+                <button onclick="showSection('location')"
+                    class="nav-link text-sm font-medium text-brand-dark hover:text-brand-gold transition-colors uppercase tracking-widest">Location</button>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button class="lg:hidden text-brand-dark focus:outline-none" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Nav -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
+            <div class="flex flex-col px-8 py-6 space-y-6">
+                <button onclick="showSection('home'); toggleMobileMenu()"
+                    class="text-left text-base font-medium text-brand-dark hover:text-brand-gold uppercase tracking-wider">Home</button>
+                <button onclick="showSection('about'); toggleMobileMenu()"
+                    class="text-left text-base font-medium text-brand-dark hover:text-brand-gold uppercase tracking-wider">About</button>
+                <button onclick="showSection('glamping'); toggleMobileMenu()"
+                    class="text-left text-base font-medium text-brand-dark hover:text-brand-gold uppercase tracking-wider">Glamping</button>
+                <button onclick="showSection('cafe'); toggleMobileMenu()"
+                    class="text-left text-base font-medium text-brand-dark hover:text-brand-gold uppercase tracking-wider">Coffee
+                    house</button>
+                <button onclick="showSection('activity'); toggleMobileMenu()"
+                    class="text-left text-base font-medium text-brand-dark hover:text-brand-gold uppercase tracking-wider">Activity</button>
+                <button onclick="showSection('bbq'); toggleMobileMenu()"
+                    class="text-left text-base font-medium text-brand-dark hover:text-brand-gold uppercase tracking-wider">BBQ</button>
+                <button onclick="showSection('location'); toggleMobileMenu()"
+                    class="text-left text-base font-medium text-brand-dark hover:text-brand-gold uppercase tracking-wider">Location</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="min-h-screen">
+
+        <!-- Home Section -->
+        <section id="home" class="page-section min-h-screen flex flex-col relative">
+            <!-- Hero -->
+            <div
+                class="relative h-screen w-full bg-hero-pattern bg-cover bg-center bg-no-repeat bg-fixed flex items-center justify-center text-center px-4">
+                <div class="max-w-4xl mx-auto fade-in-up">
+                    <span class="block text-brand-gold text-lg md:text-xl font-serif italic mb-4 tracking-wider">Nature
+                        & Healing</span>
+                    <h1 class="text-5xl md:text-7xl font-serif text-white font-bold mb-6 leading-tight drop-shadow-lg">
+                        숲이 주는 위로,<br>포레스트 하움
+                    </h1>
+                    <p class="text-gray-200 text-lg md:text-xl font-light mb-10 max-w-2xl mx-auto leading-relaxed">
+                        일상의 소란함은 잠시 내려놓고, <br class="md:hidden">오직 나를 위한 숲 속의 쉼터에서<br>
+                        진정한 휴식과 평온을 경험하세요.
+                    </p>
+                    <button onclick="showSection('about')"
+                        class="px-10 py-4 bg-transparent border border-white text-white hover:bg-white hover:text-brand-dark transition-all duration-300 uppercase text-sm tracking-[0.2em]">
+                        Explore More
+                    </button>
+                </div>
+
+                <!-- Scroll Indicator -->
+                <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-white/70">
+                    <i class="fas fa-chevron-down text-2xl"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="page-section py-24 bg-brand-cream">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row items-center gap-16">
+                    <div class="w-full md:w-1/2 relative fade-in-up">
+                        <div class="absolute -top-4 -left-4 w-24 h-24 border-t-2 border-l-2 border-brand-gold/50"></div>
+                        <div class="absolute -bottom-4 -right-4 w-24 h-24 border-b-2 border-r-2 border-brand-gold/50">
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2074&auto=format&fit=crop"
+                            alt="Forest View"
+                            class="w-full h-[500px] object-cover shadow-2xl grayscale hover:grayscale-0 transition-all duration-700">
+                    </div>
+                    <div class="w-full md:w-1/2 space-y-8 fade-in-up delay-200">
+                        <div>
+                            <span class="text-brand-gold font-serif italic text-lg">Our Story</span>
+                            <h2 class="text-4xl md:text-5xl font-serif text-brand-dark mt-2 mb-6">자연 속의 쉼터</h2>
+                            <div class="w-16 h-0.5 bg-brand-dark"></div>
+                        </div>
+                        <p class="text-gray-600 leading-loose text-lg font-light">
+                            포레스트 하움은 경남 함안의 깊은 숲 속에 자리 잡은 프라이빗 힐링 공간입니다.
+                            단순한 숙박을 넘어, 자연과의 교감을 통해 지친 몸과 마음을 치유하는 것을 목표로 합니다.
+                        </p>
+                        <p class="text-gray-600 leading-loose text-lg font-light">
+                            아침에는 새소리와 함께 눈을 뜨고, 밤에는 쏟아지는 별빛 아래서 잠드는 곳.
+                            포레스트 하움에서 당신만의 특별한 숲 이야기를 만들어보세요.
+                        </p>
+                        <div class="grid grid-cols-3 gap-6 pt-4 border-t border-gray-200">
+                            <div class="text-center">
+                                <i class="fas fa-tree text-2xl text-brand-dark mb-2"></i>
+                                <p class="text-xs uppercase tracking-widest text-gray-500">Nature</p>
+                            </div>
+                            <div class="text-center">
+                                <i class="fas fa-star text-2xl text-brand-dark mb-2"></i>
+                                <p class="text-xs uppercase tracking-widest text-gray-500">Luxury</p>
+                            </div>
+                            <div class="text-center">
+                                <i class="fas fa-coffee text-2xl text-brand-dark mb-2"></i>
+                                <p class="text-xs uppercase tracking-widest text-gray-500">Relax</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Glamping Section -->
+        <section id="glamping" class="page-section py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-20 fade-in-up">
+                    <span class="text-brand-gold font-serif italic text-lg">Stay with Nature</span>
+                    <h2 class="text-4xl md:text-5xl font-serif text-brand-dark mt-2">Glamping Suites</h2>
+                </div>
+
+                <div class="space-y-24">
+                    <!-- Item 1 -->
+                    <div class="group flex flex-col lg:flex-row gap-12 items-center fade-in-up">
+                        <div class="w-full lg:w-3/5 overflow-hidden shadow-2xl relative">
+                            <div class="img-zoom-container h-[500px]">
+                                <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?q=80&w=2070&auto=format&fit=crop"
+                                    alt="Glamping House" class="w-full h-full object-cover img-zoom">
+                            </div>
+                            <div
+                                class="absolute bottom-0 left-0 bg-white p-6 md:p-8 max-w-md shadow-lg transform translate-y-4 translate-x-4 group-hover:translate-y-0 group-hover:translate-x-0 transition-transform duration-500">
+                                <h3 class="text-2xl font-serif text-brand-dark mb-2">Premium Glamping House</h3>
+                                <p class="text-gray-500 text-sm mb-4">1박 2일 숙박 패키지</p>
+                                <a href="#"
+                                    class="text-brand-gold uppercase text-xs tracking-widest hover:text-brand-dark transition-colors">View
+                                    Details <i class="fas fa-arrow-right ml-2"></i></a>
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-2/5 space-y-6 px-4">
+                            <h3 class="text-3xl font-serif text-brand-dark">글램핑 하우스</h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                호텔급 침구류와 개별 욕실, 냉난방 시설을 완비하여 사계절 내내 쾌적한 휴식을 제공합니다.
+                                프라이빗한 데크에서 숲을 바라보며 여유로운 시간을 보내세요.
+                            </p>
+                            <ul class="space-y-4 text-gray-600 pt-4">
+                                <li class="flex items-center"><span
+                                        class="w-2 h-2 bg-brand-gold rounded-full mr-4"></span>퀸 사이즈 침대 2개 (4인 기준)</li>
+                                <li class="flex items-center"><span
+                                        class="w-2 h-2 bg-brand-gold rounded-full mr-4"></span>개별 바베큐장 및 불멍 존</li>
+                                <li class="flex items-center"><span
+                                        class="w-2 h-2 bg-brand-gold rounded-full mr-4"></span>몰튼 브라운 어메니티 제공</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="group flex flex-col lg:flex-row-reverse gap-12 items-center fade-in-up">
+                        <div class="w-full lg:w-3/5 overflow-hidden shadow-2xl relative">
+                            <div class="img-zoom-container h-[500px]">
+                                <img src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=2070&auto=format&fit=crop"
+                                    alt="Day Rental" class="w-full h-full object-cover img-zoom">
+                            </div>
+                            <div
+                                class="absolute bottom-0 right-0 bg-white p-6 md:p-8 max-w-md shadow-lg transform translate-y-4 -translate-x-4 group-hover:translate-y-0 group-hover:translate-x-0 transition-transform duration-500 text-right">
+                                <h3 class="text-2xl font-serif text-brand-dark mb-2">Day Camping Rental</h3>
+                                <p class="text-gray-500 text-sm mb-4">무박 렌탈 (당일 캠크닉)</p>
+                                <a href="#"
+                                    class="text-brand-gold uppercase text-xs tracking-widest hover:text-brand-dark transition-colors">View
+                                    Details <i class="fas fa-arrow-right ml-2"></i></a>
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-2/5 space-y-6 px-4 text-right lg:text-right">
+                            <h3 class="text-3xl font-serif text-brand-dark">무박 렌탈 글램핑</h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                숙박의 부담 없이 가볍게 떠나는 숲 속 피크닉.
+                                텐트와 타프, 캠핑 장비가 모두 준비되어 있어 몸만 오시면 됩니다.
+                            </p>
+                            <ul class="space-y-4 text-gray-600 pt-4 flex flex-col items-end">
+                                <li class="flex items-center flex-row-reverse"><span
+                                        class="w-2 h-2 bg-brand-gold rounded-full ml-4"></span>이용시간: 11:00 - 21:00</li>
+                                <li class="flex items-center flex-row-reverse"><span
+                                        class="w-2 h-2 bg-brand-gold rounded-full ml-4"></span>바베큐 그릴 및 숯 제공</li>
+                                <li class="flex items-center flex-row-reverse"><span
+                                        class="w-2 h-2 bg-brand-gold rounded-full ml-4"></span>외부 음식 반입 가능</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cafe Section -->
+        <section id="cafe" class="page-section py-24 bg-brand-cream">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-20 fade-in-up">
+                    <span class="text-brand-gold font-serif italic text-lg">Taste of Forest</span>
+                    <h2 class="text-4xl md:text-5xl font-serif text-brand-dark mt-2">Coffee house Hau'm</h2>
+                    <p class="text-gray-500 mt-4 font-light">숲과 가장 가까운 쉼, 커피하우스 하움</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Menu 1 -->
+                    <div
+                        class="bg-white p-4 pb-8 shadow-lg hover:shadow-2xl transition-all duration-300 fade-in-up delay-100 group">
+                        <div class="overflow-hidden h-64 mb-6">
+                            <img src="images/watermelon_bingsu.jpg" alt="Watermelon Bingsu"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        </div>
+                        <div class="text-center px-4">
+                            <h3 class="text-xl font-serif font-bold text-brand-dark mb-2">수박 빙수</h3>
+                            <p class="text-brand-gold text-sm uppercase tracking-widest mb-4">Summer Special</p>
+                            <p class="text-gray-600 text-sm leading-relaxed">
+                                당도 높은 제철 수박을 통째로 갈아 만든 시원하고 달콤한 하움의 시그니처 빙수입니다.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Menu 2 -->
+                    <div
+                        class="bg-white p-4 pb-8 shadow-lg hover:shadow-2xl transition-all duration-300 fade-in-up delay-200 group">
+                        <div class="overflow-hidden h-64 mb-6">
+                            <img src="images/blueberry_ade.jpg" alt="Blueberry Ade"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        </div>
+                        <div class="text-center px-4">
+                            <h3 class="text-xl font-serif font-bold text-brand-dark mb-2">블루베리 에이드</h3>
+                            <p class="text-brand-gold text-sm uppercase tracking-widest mb-4">Farm Fresh</p>
+                            <p class="text-gray-600 text-sm leading-relaxed">
+                                포레스트 하움 농장에서 직접 수확한 유기농 블루베리로 만든 상큼한 에이드입니다.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Menu 3 -->
+                    <div
+                        class="bg-white p-4 pb-8 shadow-lg hover:shadow-2xl transition-all duration-300 fade-in-up delay-300 group">
+                        <div class="overflow-hidden h-64 mb-6">
+                            <img src="images/blueberry_bread.jpg" alt="Blueberry Bread"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        </div>
+                        <div class="text-center px-4">
+                            <h3 class="text-xl font-serif font-bold text-brand-dark mb-2">블루베리 사각 식빵</h3>
+                            <p class="text-brand-gold text-sm uppercase tracking-widest mb-4">Bakery</p>
+                            <p class="text-gray-600 text-sm leading-relaxed">
+                                쫄깃한 식빵 결 사이사이에 달콤한 블루베리 잼이 가득 들어있는 인기 베이커리입니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity Section -->
+        <section id="activity" class="page-section py-24 bg-gradient-to-br from-brand-cream to-white relative overflow-hidden">
+            <!-- Decorative Elements -->
+            <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-gold/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-brand-dark/5 rounded-full blur-3xl"></div>
+            
+            <div class="container mx-auto px-6 relative z-10">
+                <!-- Header -->
+                <div class="text-center mb-16 fade-in-up">
+                    <span class="text-brand-gold font-serif italic text-lg">Farm Experience</span>
+                    <h2 class="text-4xl md:text-5xl font-serif text-brand-dark mt-2 mb-4">체험 농장 프로그램</h2>
+                    <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                        자연과 하나되는 특별한 경험, 포레스트 하움에서 준비한 다채로운 농장 체험 프로그램을 만나보세요.
+                    </p>
+                </div>
+
+                <!-- Programs Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                    <!-- Program 1: Blueberry Picking -->
+                    <div class="group fade-in-up">
+                        <div class="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 h-full">
+                            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 to-blue-400"></div>
+                            <div class="p-8">
+                                <div class="w-16 h-16 bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fas fa-seedling text-3xl text-purple-600"></i>
+                                </div>
+                                <h3 class="text-2xl font-serif font-bold text-brand-dark mb-3">블루베리 따기</h3>
+                                <div class="flex items-center gap-2 mb-4">
+                                    <i class="fas fa-calendar-alt text-brand-gold text-sm"></i>
+                                    <p class="text-sm text-brand-gold font-medium">6월 - 8월</p>
+                                </div>
+                                <p class="text-gray-600 leading-relaxed mb-4">
+                                    유기농으로 재배한 신선한 블루베리를 직접 수확하는 체험입니다. 채취한 블루베리는 가져가실 수 있습니다.
+                                </p>
+                                <div class="flex items-center text-brand-dark font-medium group-hover:text-brand-gold transition-colors">
+                                    <span class="text-sm">자세히 보기</span>
+                                    <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Program 2: Seasonal Vegetables -->
+                    <div class="group fade-in-up delay-100">
+                        <div class="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 h-full">
+                            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-emerald-400"></div>
+                            <div class="p-8">
+                                <div class="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fas fa-carrot text-3xl text-green-600"></i>
+                                </div>
+                                <h3 class="text-2xl font-serif font-bold text-brand-dark mb-3">계절 채소 수확</h3>
+                                <div class="flex items-center gap-2 mb-4">
+                                    <i class="fas fa-calendar-alt text-brand-gold text-sm"></i>
+                                    <p class="text-sm text-brand-gold font-medium">연중 운영</p>
+                                </div>
+                                <p class="text-gray-600 leading-relaxed mb-4">
+                                    상추, 깻잎, 고추 등 신선한 유기농 채소를 직접 수확합니다. BBQ와 함께 즐기실 수 있습니다.
+                                </p>
+                                <div class="flex items-center text-brand-dark font-medium group-hover:text-brand-gold transition-colors">
+                                    <span class="text-sm">자세히 보기</span>
+                                    <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Program 3: Little Farmer School -->
+                    <div class="group fade-in-up delay-200">
+                        <div class="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 h-full">
+                            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-amber-400 to-orange-400"></div>
+                            <div class="p-8">
+                                <div class="w-16 h-16 bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fas fa-hat-cowboy text-3xl text-amber-600"></i>
+                                </div>
+                                <h3 class="text-2xl font-serif font-bold text-brand-dark mb-3">꼬마 농부 학교</h3>
+                                <div class="flex items-center gap-2 mb-4">
+                                    <i class="fas fa-calendar-alt text-brand-gold text-sm"></i>
+                                    <p class="text-sm text-brand-gold font-medium">주말 운영</p>
+                                </div>
+                                <p class="text-gray-600 leading-relaxed mb-4">
+                                    아이들이 농작물을 심고 가꾸며 자연의 소중함을 배우는 교육 프로그램입니다.
+                                </p>
+                                <div class="flex items-center text-brand-dark font-medium group-hover:text-brand-gold transition-colors">
+                                    <span class="text-sm">자세히 보기</span>
+                                    <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Program 4: Forest Walking Tour -->
+                    <div class="group fade-in-up delay-300">
+                        <div class="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 h-full">
+                            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-400 to-cyan-400"></div>
+                            <div class="p-8">
+                                <div class="w-16 h-16 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fas fa-walking text-3xl text-teal-600"></i>
+                                </div>
+                                <h3 class="text-2xl font-serif font-bold text-brand-dark mb-3">숲속 산책 투어</h3>
+                                <div class="flex items-center gap-2 mb-4">
+                                    <i class="fas fa-calendar-alt text-brand-gold text-sm"></i>
+                                    <p class="text-sm text-brand-gold font-medium">연중 운영</p>
+                                </div>
+                                <p class="text-gray-600 leading-relaxed mb-4">
+                                    전문 가이드와 함께 숲속을 걸으며 자연의 아름다움과 치유를 경험하는 힐링 프로그램입니다.
+                                </p>
+                                <div class="flex items-center text-brand-dark font-medium group-hover:text-brand-gold transition-colors">
+                                    <span class="text-sm">자세히 보기</span>
+                                    <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom CTA -->
+                <div class="text-center mt-16 fade-in-up delay-400">
+                    <p class="text-gray-600 mb-6">모든 프로그램은 사전 예약제로 운영됩니다</p>
+                    <button class="px-8 py-4 bg-brand-dark text-white rounded-full hover:bg-brand-gold transition-all duration-300 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-phone-alt mr-2"></i>
+                        프로그램 예약 문의
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- BBQ Section -->
+        <section id="bbq" class="page-section py-24 bg-brand-dark text-white relative">
+            <div
+                class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1974&auto=format&fit=crop')] bg-cover bg-center opacity-25">
+            </div>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-20 fade-in-up">
+                    <span class="text-brand-gold font-serif italic text-lg">Dining</span>
+                    <h2 class="text-4xl md:text-5xl font-serif text-white mt-2">Premium BBQ</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <!-- BBQ 1 -->
+                    <div
+                        class="bg-white/5 backdrop-blur-sm border border-white/10 p-10 rounded-xl hover:bg-white/10 transition-colors fade-in-up">
+                        <div class="flex items-center mb-6">
+                            <i class="fas fa-fire text-3xl text-brand-gold mr-4"></i>
+                            <h3 class="text-2xl font-serif font-bold">글램핑 패키지 BBQ</h3>
+                        </div>
+                        <p class="text-gray-300 mb-8 leading-relaxed">
+                            숙박 고객님을 위해 준비된 완벽한 바베큐 세트입니다.
+                            장보기의 번거로움 없이 최고급 재료로 준비된 만찬을 즐기세요.
+                        </p>
+                        <ul class="space-y-4 text-gray-300">
+                            <li class="flex items-center"><i class="fas fa-check text-brand-gold mr-3"></i>한돈 목살/삼겹살
+                                500g (2인 기준)</li>
+                            <li class="flex items-center"><i class="fas fa-check text-brand-gold mr-3"></i>수제 소시지, 블랙타이거
+                                새우</li>
+                            <li class="flex items-center"><i class="fas fa-check text-brand-gold mr-3"></i>유기농 쌈채소 및 수제
+                                반찬 5종</li>
+                        </ul>
+                    </div>
+                    <!-- BBQ 2 -->
+                    <div
+                        class="bg-white/5 backdrop-blur-sm border border-white/10 p-10 rounded-xl hover:bg-white/10 transition-colors fade-in-up delay-100">
+                        <div class="flex items-center mb-6">
+                            <i class="fas fa-utensils text-3xl text-brand-gold mr-4"></i>
+                            <h3 class="text-2xl font-serif font-bold">1일(무박) 이용 BBQ</h3>
+                        </div>
+                        <p class="text-gray-300 mb-8 leading-relaxed">
+                            당일 캠크닉 고객님을 위한 실속형 구성입니다.
+                            필요한 모든 장비가 세팅되어 있어 편안하게 고기만 구우시면 됩니다.
+                        </p>
+                        <ul class="space-y-4 text-gray-300">
+                            <li class="flex items-center"><i class="fas fa-check text-brand-gold mr-3"></i>웨버 그릴 및 최고급
+                                비장탄 제공</li>
+                            <li class="flex items-center"><i class="fas fa-check text-brand-gold mr-3"></i>캠핑 테이블 및 의자
+                                세팅</li>
+                            <li class="flex items-center"><i class="fas fa-check text-brand-gold mr-3"></i>고기 세트 현장 주문
+                                가능</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location Section -->
+        <section id="location" class="page-section py-24 bg-brand-cream">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col lg:flex-row gap-16">
+                    <!-- Info -->
+                    <div class="w-full lg:w-1/3 space-y-10 fade-in-up">
+                        <div>
+                            <span class="text-brand-gold font-serif italic text-lg">Contact Us</span>
+                            <h2 class="text-4xl font-serif text-brand-dark mt-2 mb-6">오시는 길</h2>
+                            <p class="text-gray-600 leading-relaxed">
+                                경남 함안의 맑은 공기가 머무는 곳.<br>
+                                포레스트 하움에서 기다리겠습니다.
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-brand-dark text-white flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-bold text-brand-dark">Address</h4>
+                                    <p class="text-gray-600">경남 함안군 칠원읍 운곡리 250-1번지 일원</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-brand-dark text-white flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-bold text-brand-dark">Phone</h4>
+                                    <p class="text-gray-600">055-000-0000</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-brand-dark text-white flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-bold text-brand-dark">Email</h4>
+                                    <p class="text-gray-600">foresthaum@gmail.com</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-4 pt-4">
+                            <a href="#"
+                                class="w-12 h-12 rounded-full border border-brand-dark flex items-center justify-center text-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300">
+                                <i class="fab fa-instagram text-xl"></i>
+                            </a>
+                            <a href="#"
+                                class="w-12 h-12 rounded-full border border-brand-dark flex items-center justify-center text-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300">
+                                <i class="fab fa-facebook-f text-xl"></i>
+                            </a>
+                            <a href="#"
+                                class="w-12 h-12 rounded-full border border-brand-dark flex items-center justify-center text-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300">
+                                <i class="fab fa-youtube text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Map -->
+                    <div
+                        class="w-full lg:w-2/3 h-[500px] bg-gray-200 rounded-2xl overflow-hidden shadow-xl fade-in-up delay-200 relative group">
+                        <img src="images/location_map.jpg" alt="포레스트 하움 위치"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-white/60 py-12 border-t border-white/10">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0 text-center md:text-left">
+                <h3 class="text-2xl font-serif text-white font-bold mb-2">Forest Hau'm</h3>
+                <p class="text-sm">Nature, Healing, and You.</p>
+            </div>
+            <div class="text-sm text-center md:text-right">
+                <p class="mb-2">&copy; 2024 Forest Hau'm. All rights reserved.</p>
+                <div class="flex space-x-6 justify-center md:justify-end">
+                    <a href="#" class="hover:text-brand-gold transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-brand-gold transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // SPA Navigation Logic
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // Trigger Animations for the new section
+                setTimeout(() => {
+                    observeElements(targetSection);
+                }, 100);
+            }
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Intersection Observer for Animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, observerOptions);
+
+        function observeElements(parent = document) {
+            const animatedElements = parent.querySelectorAll('.fade-in-up, .fade-in');
+            animatedElements.forEach(el => {
+                el.classList.remove('visible'); // Reset for re-animation if needed
+                observer.observe(el);
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('home');
+            observeElements();
+        });
+    </script>
+</body>
+
+</html>
